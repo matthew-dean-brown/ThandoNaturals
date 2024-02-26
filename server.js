@@ -72,13 +72,13 @@ app.use(express.static("Views"))
 // app.use('/products','indexRouter')
 
 app.patch('/products/:iditems',async(req,res)=>{
-    let{prodName,amount} = req.body
+    let{quantity,amount} = req.body
     const [product] = await getproduct(+req.params.iditems)
   // turnary functions
-  prodName ? prodName=prodName : {prodName}=product
+ quantity ? quantity=quantity : {quantity}=product
    amount? amount = amount: {amount}=product
     console.log(product);
-    await updateproduct(prodName,amount,+req.params.iditems)
+    await updateproduct(quantity,amount,+req.params.iditems)
     res.json(await getproducts())
 })
 

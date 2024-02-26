@@ -39,11 +39,13 @@ const deleteproduct = async(iditems)=>{
 }
 const updateproduct = async (prodName,prodUrl,quantity,amount,Category,iditems)=>{
     const [product] = await pool.query(`
-    UPDATE items set ProdName= ?, amount=?
+    UPDATE items set quantity= ?, amount=?
     WHERE (iditems=?)
     `,[prodName,prodUrl,quantity,amount,Category,iditems])
-    return getproduct(product.insertiditems)
+    return getproducts(product.insertiditems)
 }
+  
+// for users table
 
 const adduser = async(Username,Password)=>{
     const user = await pool.query(` 
@@ -59,9 +61,5 @@ const checkuser = async(Username)=>{
     `,[Username])
     return Password
 }
-
-
-
 export{getproducts,getproduct,addproduct,deleteproduct,updateproduct,adduser,checkuser}
-// for users table
-
+// console.log(await adduser('Thandeka','19778'))
