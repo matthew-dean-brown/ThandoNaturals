@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import {config} from 'dotenv';
 import {hash,compare} from 'bcrypt';
-import {getproducts,getproduct,addproduct,deleteproduct,updateproduct} from './models/database.js';
+import {getproducts,getproduct,addproduct,deleteproduct,updateproduct,updateuser,deleteuser,updateuser} from './models/database.js';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
    config()
@@ -75,6 +75,44 @@ app.post('/products',async(req, res)=>{
 app.use(express.static("Views"))
 // app.use('/products','indexRouter')
 
+
+// app.get('/products',middleware,async(req, res)=>{
+//     res.send(await getproducts())
+// })
+
+app.get('/products/:idusers',async(req, res)=>{
+    res.send(await getusers(+req.params.idusers))
+})
+
+  //  delete a user
+app.delete('/products/:idusers',async(req, res)=>{
+   res.send(await deleteuser(req.params.idusers))
+})
+
+// Edit a user 
+app.patch('/products/:idusers',async(req, res)=>{
+    let {firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile} = req.body
+    const [product]= await getuser(+req.params.idusers)
+    firstName ? firstName=firstName: {firstName}=product
+    lasttName ?lasttName=lasttName: {lasttName}=product
+   userAge? userAge=userAge: {userAge}=product
+   Gender ? Gender=Gender: {Gender}=product
+   userRole ? userRole= userRole: { userRole}=product
+   emailAdd ? emailAdd= emailAdd: {emailAdd}=product
+   userPass ? userPass= userPass: {userPass}=product
+   userProfile ? userProfile= userProfile: {userProfile}=product
+    console.log(product);
+    await updateuser(firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile+req.params.idusers)
+    res.json(await getusers())
+})
+
+app.post('/products',async(req, res)=>{
+    const {idusers,firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile} = req.body
+    res.send(await adduser(idusers,firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile))
+    })
+          
+app.use(express.static("Views"))
+// app.use('/products','indexRouter')
 
 
 // Create User
