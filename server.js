@@ -55,11 +55,15 @@ app.delete('/products/:iditems',async(req, res)=>{
 
 // Edit a product
 app.patch('/products/:iditems',async(req, res)=>{
-    let {prodName,amount} = req.body
+    let {prodName,quantity,amount,Category,prodUrl,} = req.body
     const [product]= await getproduct(+req.params.iditems)
-    prodName ? amount=amount: {amount}=product
+    prodName ? prodName=prodName: {prodName}=product
+    quantity ?quantity=quantity: {quantity}=product
+   amount ? amount=amount: {amount}=product
+   Category ? Category=Category: {Category}=product
+   prodUrl ? prodUrl=prodUrl: {prodUrl}=product
     console.log(product);
-    await updateproduct(prodName,amount,+req.params.iditems)
+    await updateproduct(prodName,quantity,amount,Category,prodUrl+req.params.iditems)
     res.json(await getproducts())
 })
 
@@ -71,17 +75,9 @@ app.post('/products',async(req, res)=>{
 app.use(express.static("Views"))
 // app.use('/products','indexRouter')
 
-app.patch('/products/:iditems',async(req,res)=>{
-    let{quantity,amount} = req.body
-    const [product] = await getproduct(+req.params.iditems)
-  // turnary functions
- quantity ? quantity=quantity : {quantity}=product
-   amount? amount = amount: {amount}=product
-    console.log(product);
-    await updateproduct(quantity,amount,+req.params.iditems)
-    res.json(await getproducts())
-})
 
+
+// Create User
 
 
 
