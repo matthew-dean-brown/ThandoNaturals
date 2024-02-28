@@ -1,125 +1,120 @@
 import express from 'express';
 import cors from 'cors';
-import {config} from 'dotenv';
-import {hash,compare} from 'bcrypt';
-import {getproducts,getproduct,addproduct,deleteproduct,updateproduct,updateuser,deleteuser,updateuser} from './models/database.js';
+import { config } from 'dotenv';
+import { getproducts, getproduct, addproduct, deleteproduct, updateproduct, adduser, checkuser, getusers, getuser, deleteuser } from './models/database.js';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
-   config()
 
-   const app = express()
+config();
+
+const app = express();
+
 app.use(cors({
-    origin: '  http://localhost:8985:',
-    credentials:true
-}))
-app.use(express.json())
-app.use(cookieParser())
-// app.post('/login',(req,res)=>{
-//     const{username}=req.body
-//     const token = jwt.sign({username:username},
-//         process.env.SECERT_KEY,{expiresIN:'1h'})
-//         res.cookie('jwt',token)
-//         res.json({
-//             msg:"You have logged in"
-//         })
-//     })
- const authenticate = (req, res)=>{
-            let {cookie} = req.headers
-           let tokenInHeader = cookie.split('=')[1]
-           if (token===null)res.send(401)
-           jwt.verify(tokenInHeader,process.env.SECRET_key,
-            (err,user)=>{
-                if(err,user) return res.sendStatus(403 )
-                req.user = user
-            }
-            )
-  
-        }
-const middleware = (req, res,next)=>{
-            console.log('Searching for products');
-            req.body.response === "ok"? next(): res.send('Please type correctly')
-        }
-// get all products
-app.get('/products',middleware,async(req, res)=>{
-    res.send(await getproducts())
-})
+    origin: 'http://localhost:8985',
+    credentials: true
+}));
+app.use(express.json());
+app.use(cookieParser());
 
-app.get('/products/:iditems',async(req, res)=>{
-    res.send(await getproducts(+req.params.iditems))
-})
+// Authentication middleware
+const authenticate = (req, res) => {
+    let { cookie } = req.headers;
+    let tokenInHeader = cookie.split('=')[1];
+    if (tokenInHeader === null) res.send(401);
+    jwt.verify(tokenInHeader, process.env.SECRET_key, (err, user) => {
+        if (err || !user) return res.sendStatus(403);
+        req.user = user;
+    });
+};
 
-  //  delete a product
-app.delete('/products/:iditems',async(req, res)=>{
-   res.send(await deleteproduct(req.params.iditems))
-})
+// Middleware
+const middleware = (req, res, next) => {
+    console.log('getting products');
+    req.body.response === 'ok' ? next() : res.send('Please type correct response');
+};
 
-// Edit a product
-app.patch('/products/:iditems',async(req, res)=>{
-    let {prodName,quantity,amount,Category,prodUrl,} = req.body
-    const [product]= await getproduct(+req.params.iditems)
-    prodName ? prodName=prodName: {prodName}=product
-    quantity ?quantity=quantity: {quantity}=product
-   amount ? amount=amount: {amount}=product
-   Category ? Category=Category: {Category}=product
-   prodUrl ? prodUrl=prodUrl: {prodUrl}=product
-    console.log(product);
-    await updateproduct(prodName,quantity,amount,Category,prodUrl+req.params.iditems)
-    res.json(await getproducts())
-})
+// Get all products
+app.get('/products', middleware, async (req, res) => {
+    res.send(await getproducts());
+});  
 
-app.post('/products',async(req, res)=>{
-    const {iditems,prodName,quantity,amount,Category,prodUrl} = req.body
-    res.send(await addproduct(iditems,prodName,quantity,amount,Category, prodUrl))
-    })
-          
-app.use(express.static("Views"))
-// app.use('/products','indexRouter')
-
-
-// app.get('/products',middleware,async(req, res)=>{
-//     res.send(await getproducts())
-// })
-
-app.get('/products/:idusers',async(req, res)=>{
-    res.send(await getusers(+req.params.idusers))
-})
-
-  //  delete a user
-app.delete('/products/:idusers',async(req, res)=>{
-   res.send(await deleteuser(req.params.idusers))
-})
-
-// Edit a user 
-app.patch('/products/:idusers',async(req, res)=>{
-    let {firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile} = req.body
-    const [product]= await getuser(+req.params.idusers)
-    firstName ? firstName=firstName: {firstName}=product
-    lasttName ?lasttName=lasttName: {lasttName}=product
-   userAge? userAge=userAge: {userAge}=product
-   Gender ? Gender=Gender: {Gender}=product
-   userRole ? userRole= userRole: { userRole}=product
-   emailAdd ? emailAdd= emailAdd: {emailAdd}=product
-   userPass ? userPass= userPass: {userPass}=product
-   userProfile ? userProfile= userProfile: {userProfile}=product
-    console.log(product);
-    await updateuser(firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile+req.params.idusers)
-    res.json(await getusers())
-})
-
-app.post('/products',async(req, res)=>{
-    const {idusers,firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile} = req.body
-    res.send(await adduser(idusers,firstName,lasttName,userAge,Gender,userRole,emailAdd,userPass,userProfile))
-    })
-          
-app.use(express.static("Views"))
-// app.use('/products','indexRouter')
-
-
-// Create User
+// Get product by ID
+app.get('/products/:iditems', async (req, res) => {
+    res.send(await getproducts(+req.params.iditems));
+});
 
 
 
+// Delete a product
+app.delete('/products/:iditems', async (req, res) => {
+    res.send(await deleteproduct(req.params.iditems));
+});
 
-app.listen(process.env.PORT, function(){
-    console.log('listening on port http://localhost:'+process.env.PORT)
-})
+// Update a product
+
+app.patch('/products/:iditems', async (req, res) => {
+    try {
+        const { prodName, prodUrl, quantity, amount, Category } = req.body;
+        await updateproduct(prodName, prodUrl, quantity, amount, Category, +req.params.iditems);
+        res.json(await getproducts());
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Internal Server Error' });
+    }
+});
+
+
+
+// Add a product
+app.post('/products', async (req, res) => {
+    const { iditems, prodName, quantity, amount, Category, prodUrl } = req.body;
+    res.send(await addproduct(iditems, prodName, quantity, amount, Category, prodUrl));
+});
+
+// Serve static files
+app.use(express.static('Views'));
+
+// ... (User routes)
+
+app.get('/users', async (req, res) => {
+    res.send(await getusers());
+});
+
+app.get('/users/:idusers', async (req, res) => {
+    res.send(await getuser(+req.params.idusers));
+});
+
+// Update a user
+app.patch('/users/:idusers', async (req, res) => {
+    const { firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile } = req.body;
+    const [user] = await getuser(+req.params.idusers);
+    const updatedFirstName = firstName || user.firstName;
+    const updatedLastName = lastName || user.lastName;
+    const updatedUserAge = userAge || user.userAge;
+    const updatedGender = Gender || user.Gender;
+    const updatedUserRole = userRole || user.userRole;
+    const updatedEmailAdd = emailAdd || user.emailAdd;
+    const updatedUserPass = userPass || user.userPass;
+    const updatedUserProfile = userProfile || user.userProfile;
+
+    await updateuser(updatedFirstName, updatedLastName, updatedUserAge, updatedGender, updatedUserRole, updatedEmailAdd, updatedUserPass, updatedUserProfile + req.params.idusers);
+    res.json(await getusers());
+});
+
+// Delete a user
+app.delete('/users/:idusers', async (req, res) => {
+    res.send(await deleteuser(req.params.idusers));
+});
+
+// Add a user
+app.post('/users', async (req, res) => {
+    let { idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile } = req.body;
+    res.send(await adduser(idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile));
+});
+
+
+
+// Server listening
+app.listen(process.env.PORT, function () {
+    console.log('listening on port http://localhost:' + process.env.PORT);
+});
