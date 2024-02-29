@@ -1,59 +1,50 @@
-import mysql from 'mysql2';
-import { config } from 'dotenv';
+import {pool} from '../Config/config.js';
+// import { config } from 'dotenv';
 
-config();
+// config();
 
-// Extract Clever Cloud MySQL credentials from the environment variables
-const {
-    MYSQL_ADDON_HOST,
-    MYSQL_ADDON_PORT,
-    MYSQL_ADDON_DB,
-    MYSQL_ADDON_USER,
-    MYSQL_ADDON_PASSWORD
-} = process.env;
+//  Clever Cloud MySQL 
+// const {
+//     MYSQL_ADDON_HOST,
+//     MYSQL_ADDON_PORT,
+//     MYSQL_ADDON_DB,
+//     MYSQL_ADDON_USER,
+//     MYSQL_ADDON_PASSWORD
+// } = process.env;
 
-// Create a connection pool
-const pool = mysql.createPool({
-    host: MYSQL_ADDON_HOST,
-    port: MYSQL_ADDON_PORT,
-    user: MYSQL_ADDON_USER,
-    password: MYSQL_ADDON_PASSWORD,
-    database: MYSQL_ADDON_DB,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-}).promise();
+//  connection pool 
+
 // Items logic
 
 const getproducts = async () => {
-    const [result] = await pool.query(`SELECT * FROM items`);
+    const [result] = await pool.query(`SELECT * FROM products`);
     return result;
 };
 
-const getproduct = async (iditems) => {
-    const [result] = await pool.query(`SELECT * FROM items WHERE iditems = ?`, [iditems]);
+const getproduct = async (prodID) => {
+    const [result] = await pool.query(`SELECT * FROM products WHERE prodID = ?`, [prodID]);
     return result;
 };
 
-const addproduct = async (iditems, prodName, quantity, amount, Category, prodUrl) => {
+const addproduct = async (prodID, prodName, quantity, amount, Category, prodUrl) => {
     await pool.query(
-        "INSERT INTO items (iditems, prodName, quantity, amount, Category, prodUrl) VALUES (?,?,?,?,?,?)",
-        [iditems, prodName, quantity, amount, Category, prodUrl]
+        "INSERT INTO products (prodID, prodName, quantity, amount, Category, prodUrl) VALUES (?,?,?,?,?,?)",
+        [prodID, prodName, quantity, amount, Category, prodUrl]
     );
     return getproducts();
 };
 
-const deleteproduct = async (iditems) => {
-    await pool.query(`DELETE FROM items WHERE iditems = ?`, [iditems]);
+const deleteproduct = async (prodID) => {
+    await pool.query(`DELETE FROM products WHERE prodID = ?`, [prodID]);
     return getproducts();
 };
 
-const updateproduct = async (prodName, prodUrl, quantity, amount, Category, iditems) => {
+const updateproduct = async (prodName, prodUrl, quantity, amount, category, prodID) => {
     await pool.query(`
-        UPDATE items 
+        UPDATE products
         SET prodName=?, prodUrl=?, quantity=?, amount=?, Category=?
-        WHERE iditems=?
-    `, [prodName, prodUrl, quantity, amount, Category, iditems]);
+        WHERE prodID=?
+    `, [prodName, prodUrl, quantity, amount, category,prodID]);
     return getproducts();
 };
 
@@ -61,9 +52,9 @@ const updateproduct = async (prodName, prodUrl, quantity, amount, Category, idit
 
 const adduser = async (Username, Password) => {
     await pool.query(`
-        INSERT INTO users (Username, Password) 
-        VALUES (?,?);
-    `, [Username, Password]);
+        INSERT INTO users (firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]) 
+        VALUES (?,?,?,?,?,?,?,?,?);
+    `, [firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]);
 };
 
 const checkuser = async (firstName) => {

@@ -34,28 +34,28 @@ const middleware = (req, res, next) => {
 };
 
 // Get all products
-app.get('/products', middleware, async (req, res) => {
-    res.send(await getproducts());
+app.get('/products', async (req, res) => {
+  res.send(await getproducts());
 });  
 
 // Get product by ID
-app.get('/products/:iditems', async (req, res) => {
-    res.send(await getproducts(+req.params.iditems));
+app.get('/products/:prodID', async (req, res) => {
+    res.send(await getproduct(+req.params.prodID));
 });
 
 
 
 // Delete a product
-app.delete('/products/:iditems', async (req, res) => {
+app.delete('/products/:prodID', async (req, res) => {
     res.send(await deleteproduct(req.params.iditems));
 });
 
 // Update a product
 
-app.patch('/products/:iditems', async (req, res) => {
+app.patch('/products/:prodID', async (req, res) => {
     try {
         const { prodName, prodUrl, quantity, amount, Category } = req.body;
-        await updateproduct(prodName, prodUrl, quantity, amount, Category, +req.params.iditems);
+        await updateproduct(prodName, prodUrl, quantity, amount, Category, +req.params.prodID);
         res.json(await getproducts());
     } catch (error) {
         console.error(error);
@@ -67,8 +67,8 @@ app.patch('/products/:iditems', async (req, res) => {
 
 // Add a product
 app.post('/products', async (req, res) => {
-    const { iditems, prodName, quantity, amount, Category, prodUrl } = req.body;
-    res.send(await addproduct(iditems, prodName, quantity, amount, Category, prodUrl));
+    const { prodID, prodName, quantity, amount, category, prodUrl } = req.body;
+    res.send(await addproduct(prodID, prodName, quantity, amount, category, prodUrl));
 });
 
 // Serve static files
