@@ -27,14 +27,14 @@ const authenticate = (req, res) => {
     });
 };
 
-// Middleware
-const middleware = (req, res, next) => {
-    console.log('getting products');
-    req.body.response === 'ok' ? next() : res.send('Please type correct response');
-};
+// middleware
+// const middleware = (req, res, next) => {
+//     console.log('getting products');
+//     req.body.response === 'ok' ? next() : res.send('Please type correct response');
+// };
 
 // Get all products
-app.get('/products', async (req, res) => {
+app.get('/products',async (req, res) => {
   res.send(await getproducts());
 });  
 
