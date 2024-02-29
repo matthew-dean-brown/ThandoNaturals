@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img src="https://ibb.co/1s6x26s" alt="">
+    <img src="https://i.ibb.co/mBW7Qnd/Untitled-design-1.png" alt="">
     
   </div>
 </template>

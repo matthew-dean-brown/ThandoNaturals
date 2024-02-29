@@ -1,6 +1,7 @@
 <template>
   <div class="about">
-     <img src="https://i.postimg.cc/D0ST069s/Thando-Naturals-1.png" alt="" class="center-image">
+        <img src="https://i.postimg.cc/D0ST069s/Thando-Naturals-1.png" alt="" class="center-image">
+        <h1 class="about-heading">About Us</h1>
      <div class="container">
         <h2>Who Are We?</h2>
         <p>Welcome to ThandoNaturals, where love for natural hair meets empowerment. 
@@ -21,21 +22,14 @@
            <br><br>
            Welcome to the ThandoNaturals family.
            <br><br>
-           With love and curls,
-           <br><br>
-           - Thandeka & Ntando.
+           With love and curls.
         </p>
      </div>
   </div>
 </template>
 
 <style>
-  
-   h2{
-     color: black;
-   }
-
-   p{
+   h2, p {
      color: black;
    }
 
@@ -43,13 +37,45 @@
      text-align: center;
    }
 
+   /* .image-container {
+     position: relative;
+     max-width: 600px; 
+     margin: 0 auto;
+   } */
+
    .center-image {
      display: block;
      margin: 0 auto;
+     max-width: 100%; /*Ensure image fits within container*/
    }
 
-   .container{
-     max-width: 600px; /* Adjust as needed */
-     margin: 0 auto;
+   .about-heading {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     opacity: 0;
+     font-size: 3em;
+     color: white;
+     animation: fadeIn 1s forwards;
+   }
+
+   .container {
+     max-width: 600px; 
+     margin: 20px auto;
+   }
+
+   h1{
+    text-align: center;
+
+   }
+
+   @keyframes fadeIn {
+     from {
+       opacity: 0;
+     }
+     to {
+       opacity: 5;
+     }
    }
 </style>
