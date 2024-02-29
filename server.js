@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
-import { getproducts, getproduct, addproduct, deleteproduct, updateproduct,adduser,checkuser, getusers, getuser, deleteuser } from './models/database.js';
+import { getproducts, getproduct, addproduct, deleteproduct, updateproduct,adduser,checkuser, getusers, getuser, deleteuser,updateuser } from './models/database.js';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 
@@ -87,14 +87,15 @@ app.get('/users/:idusers', async (req, res) => {
 // Update a user
 app.patch('/users/:idusers', async (req, res) => {
     try {
-        const { firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers } = req.body;
-        await updateuser(firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers);
-        res.json(await getuser());
+        const { firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile } = req.body;
+        await updateuser(firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile, +req.params.idusers);
+        res.json(await getuser(+req.params.idusers));
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Internal Server Error' });
     }
 });
+
 
 
 // Delete a user

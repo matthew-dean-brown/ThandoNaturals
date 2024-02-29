@@ -80,14 +80,15 @@ const deleteuser = async (idusers) => {
     return getusers();
 };
 
-const updateuser = async (firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers) => {
+const updateuser = async (firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers) => {
     await pool.query(`
         UPDATE users 
-        SET firstName=?, lasttName=?, userAge=?, Gender=?, userRole=?, emailAdd=?, userPass=?, userProfile=?
+        SET firstName=?, lastName=?, userAge=?, Gender=?, userRole=?, emailAdd=?, userPass=?, userProfile=?
         WHERE idusers=?
-    `, [firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]);
+    `, [firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]);
     return getusers();
 };
+
  
 const checkuser = async (Username) => {
     const [[{ Password }]] = await pool.query(`SELECT Password FROM users WHERE Username = ?`, [Username]);
