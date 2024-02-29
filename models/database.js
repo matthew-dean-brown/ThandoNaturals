@@ -42,7 +42,7 @@ const deleteproduct = async (prodID) => {
 const updateproduct = async (prodName, prodUrl, quantity, amount, category, prodID) => {
     await pool.query(`
         UPDATE products
-        SET prodName=?, prodUrl=?, quantity=?, amount=?, Category=?
+        SET prodName=?, prodUrl=?, quantity=?, amount=?, category=?
         WHERE prodID=?
     `, [prodName, prodUrl, quantity, amount, category,prodID]);
     return getproducts();
@@ -50,17 +50,20 @@ const updateproduct = async (prodName, prodUrl, quantity, amount, category, prod
 
 // Users logic
 
-const adduser = async (Username, Password) => {
-    await pool.query(`
-        INSERT INTO users (firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]) 
-        VALUES (?,?,?,?,?,?,?,?,?);
-    `, [firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]);
+
+
+
+
+// users logic
+
+const adduser = async (idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile) => {
+    const [result] = await pool.query(
+        "INSERT INTO users (idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile) VALUES (?,?,?,?,?,?,?,?,?)",
+        [idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile]
+    );
+    return result;
 };
 
-const checkuser = async (firstName) => {
-    const [[{ Password }]] = await pool.query(`SELECT Password FROM users WHERE firstName = ?`, [firstName]);
-    return Password;
-};
 
 const getusers = async () => {
     const [result] = await pool.query(`SELECT * FROM users`);
@@ -84,6 +87,11 @@ const updateuser = async (firstName, lasttName, userAge, Gender, userRole, email
         WHERE idusers=?
     `, [firstName, lasttName, userAge, Gender, userRole, emailAdd, userPass, userProfile, idusers]);
     return getusers();
+};
+ 
+const checkuser = async (Username) => {
+    const [[{ Password }]] = await pool.query(`SELECT Password FROM users WHERE Username = ?`, [Username]);
+    return Password;
 };
 
 export {
