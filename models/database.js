@@ -1,18 +1,5 @@
-import {pool} from '../Config/config.js';
-// import { config } from 'dotenv';
-
-// config();
-
-//  Clever Cloud MySQL 
-// const {
-//     MYSQL_ADDON_HOST,
-//     MYSQL_ADDON_PORT,
-//     MYSQL_ADDON_DB,
-//     MYSQL_ADDON_USER,
-//     MYSQL_ADDON_PASSWORD
-// } = process.env;
-
-//  connection pool 
+import { pool } from '../Config/config.js';
+import bcrypt from 'bcrypt';
 
 // Items logic
 
@@ -26,10 +13,10 @@ const getproduct = async (prodID) => {
     return result;
 };
 
-const addproduct = async (prodID, prodName, quantity, amount, Category, prodUrl) => {
+const addproduct = async (prodID, prodName, quantity, amount, category, prodUrl) => {
     await pool.query(
         "INSERT INTO products (prodID, prodName, quantity, amount, Category, prodUrl) VALUES (?,?,?,?,?,?)",
-        [prodID, prodName, quantity, amount, Category, prodUrl]
+        [prodID, prodName, quantity, amount, category, prodUrl]
     );
     return getproducts();
 };
@@ -44,26 +31,23 @@ const updateproduct = async (prodName, prodUrl, quantity, amount, category, prod
         UPDATE products
         SET prodName=?, prodUrl=?, quantity=?, amount=?, category=?
         WHERE prodID=?
-    `, [prodName, prodUrl, quantity, amount, category,prodID]);
+    `, [prodName, prodUrl, quantity, amount, category, prodID]);
     return getproducts();
 };
 
 // Users logic
 
-
-
-
-
-// users logic
-
 const adduser = async (idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile) => {
-    const [result] = await pool.query(
-        "INSERT INTO users (idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile) VALUES (?,?,?,?,?,?,?,?,?)",
-        [idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile]
-    );
-    return result;
-};
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(userPass, 10);
 
+    await pool.query(
+        "INSERT INTO users (idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile) VALUES (?,?,?,?,?,?,?,?,?)",
+        [idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, hashedPassword, userProfile]
+    );
+
+    return getusers();
+};
 
 const getusers = async () => {
     const [result] = await pool.query(`SELECT * FROM users`);
@@ -89,10 +73,25 @@ const updateuser = async (firstName, lastName, userAge, Gender, userRole, emailA
     return getusers();
 };
 
- 
-const checkuser = async (Username) => {
-    const [[{ Password }]] = await pool.query(`SELECT Password FROM users WHERE Username = ?`, [Username]);
-    return Password;
+const checkuser = async (emailAdd, userPass) => {
+    try {
+        const [result] = await pool.query(`SELECT userPass FROM users WHERE emailAdd = ?`, [emailAdd]);
+
+        if (result.length === 0) {
+            // User not found
+            return false;
+        }
+
+        const hashedPassword = result[0].userPass;
+
+        // Compare the provided password with the hashed password
+        const passwordMatch = await bcrypt.compare(userPass, hashedPassword);
+
+        return passwordMatch;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
 };
 
 export {
