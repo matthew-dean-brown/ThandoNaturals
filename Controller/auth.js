@@ -1,34 +1,15 @@
-import { getproducts, getproduct, addproduct, deleteproduct, updateproduct } from '../models/database';
+import { checkuser } from '../models/database';
+import bcrypt from 'bcrypt';
 
-// Get all products
-export const getProducts = async (req, res) => {
-  res.send(await getproducts());
-};
+// Authenticate user
+export const authenticateUser = async (req, res, next) => {
+  const { emailAdd, userPass } = req.body;
 
-// Get product by ID
-export const getProduct = async (req, res) => {
-  res.send(await getproduct(+req.params.prodID));
-};
+  const passwordMatch = await checkuser(emailAdd, userPass);
 
-// Add a product
-export const addProduct = async (req, res) => {
-  const { prodID, prodName, quantity, amount, category, prodUrl } = req.body;
-  res.send(await addproduct(prodID, prodName, quantity, amount, category, prodUrl));
-};
-
-// Delete a product
-export const deleteProduct = async (req, res) => {
-  res.send(await deleteproduct(req.params.prodID));
-};
-
-// Update a product
-export const updateProduct = async (req, res) => {
-  try {
-    const { prodName, prodUrl, quantity, amount, category } = req.body;
-    await updateproduct(prodName, prodUrl, quantity, amount, category, +req.params.prodID);
-    res.json(await getproducts());
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: 'Internal Server Error' });
+  if (passwordMatch) {
+    next(); // Passwords match, proceed
+  } else {
+    res.status(401).json({ msg: 'Authentication failed' });
   }
 };
