@@ -38,4 +38,8 @@ let updateProduct = async (req, res) => {
     res.status(500).json({ msg: 'Internal Server Error' });
   }
 };
+
+
+
 export{getProducts,getProduct,addProduct,deleteProduct,updateProduct,}
+

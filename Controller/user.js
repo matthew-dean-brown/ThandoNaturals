@@ -1,5 +1,5 @@
 import {
-  adduser,
+ adduser,
   getusers,
   getuser,
   deleteuser,
@@ -45,4 +45,8 @@ const getUser = async (req, res) => {
     res.status(500).json({ msg: 'Internal Server Error' });
   }
 };
+
+
+
 export{updateUser,addUser,deleteUser,getUser,getUsers,adduser,deleteuser,getuser}
+
