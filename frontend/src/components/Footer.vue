@@ -17,14 +17,14 @@
 </script>
 
 <style>
-   footer {
-        background-color: #f8f9fa;
+   /* footer {
+        background-color: beige;
         padding: 10px;
         text-align: center;
-}
+} */
 
    footer p {
         margin: 0;
-        color: #343a40;
+        color: black;
 }
 </style>

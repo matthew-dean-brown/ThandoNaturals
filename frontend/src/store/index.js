@@ -14,6 +14,9 @@ export default createStore({
     setProducts(state, data) {
       state.products = data;
     },
+    setAdmin(state, data){
+      state.products = data
+    }
   },
   actions: {
     async fetchProducts({ commit }) {

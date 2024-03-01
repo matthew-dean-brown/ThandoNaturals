@@ -1,39 +1,51 @@
-<template >
-    <div>
-        <div v-if="!loaded" class="loader">
-      <div class="loader-spinner"></div>
+<template>
+  <div>
+    <div v-if="!loaded" class="loader">
+      <div class="custom-spinner"></div>
     </div>
-    </div>
-  </template>
-  <script>
-  export default {
-    data() {
-      return {
-        loaded: false // Initial state: page not loaded
-      };
-    },
-    mounted() {
-      // Simulate a 5-second delay before displaying content
-      setTimeout(() => {
-        // Set loaded to true after 2 seconds
-        this.loaded = true;
-      }, 2000);
-    }
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      loaded: false
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loaded = true;
+    }, 2000);
   }
-  </script>
-    
-    <style>
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #635531;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    </style>
+}
+</script>
+
+<style scoped>
+.loader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3333;
+}
+
+.custom-spinner {
+  border: 6px solid #226c2b; 
+  border-top: 6px solid black;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>

@@ -1,6 +1,6 @@
 <template>
     <div class="product-grid">
-      <div v-for="product in products" :key="product.prodID" class="product-card">
+      <div v-for="product in $store.state.products" :key="product.prodID" class="product-card">
       <!-- <div v-for="item in $store.state.products" :key="item" class="product-card"> -->
         <h2>{{ product.prodName }}</h2>
         <p>Quantity: {{ product.quantity }}</p>
@@ -8,6 +8,9 @@
         <p>Category: {{ product.category }}</p>
         <img :src="product.prodUrl" alt="Product Image" style="max-width: 100%; height: auto;">
       </div>
+      <!-- <div class="view-more">
+        <router-link :to="{name: 'singleProduct',params:{id: product.prodID}}">View More</router-link>
+      </div> -->
     </div>
   </template>
   

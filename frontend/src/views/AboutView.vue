@@ -37,12 +37,7 @@
      text-align: center;
    }
 
-   /* .image-container {
-     position: relative;
-     max-width: 600px; 
-     margin: 0 auto;
-   } */
-
+  
    .center-image {
      display: block;
      margin: 0 auto;

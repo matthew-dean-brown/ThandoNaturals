@@ -41,8 +41,9 @@ footer {
     position: fixed;
     bottom: 0%;
     width: 100%;
-    background-color: whitesmoke; /* to be changed */
+    background-color:beige; 
   }
+  
 
 </style>
 
