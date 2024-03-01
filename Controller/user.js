@@ -1,8 +1,15 @@
-import { adduser, getusers, getuser, deleteuser, updateuser } from '../models/database';
+
+  import {
+  adduser,
+  getusers,
+  getuser,
+  deleteuser,
+  updateuser,
+} from '../models/database.js';
 import bcrypt from 'bcrypt';
 
 // Add a user
-export const addUser = async (req, res) => {
+ const addUser = async (req, res) => {
   const { idusers, firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile } = req.body;
 
   // Hash the password
@@ -14,22 +21,22 @@ export const addUser = async (req, res) => {
 };
 
 // Get all users
-export const getUsers = async (req, res) => {
+ const getUsers = async (req, res) => {
   res.send(await getusers());
 };
 
 // Get user by ID
-export const getUser = async (req, res) => {
+const getUser = async (req, res) => {
   res.send(await getuser(+req.params.idusers));
 };
 
 // Delete a user
-export const deleteUser = async (req, res) => {
+ const deleteUser = async (req, res) => {
   res.send(await deleteuser(req.params.idusers));
 };
 
 // Update a user
-export const updateUser = async (req, res) => {
+ const updateUser = async (req, res) => {
   try {
     const { firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile } = req.body;
     await updateuser(firstName, lastName, userAge, Gender, userRole, emailAdd, userPass, userProfile, +req.params.idusers);
@@ -39,3 +46,4 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ msg: 'Internal Server Error' });
   }
 };
+export{updateUser,addUser,deleteUser,getUser,getUsers,adduser,deleteuser,getuser}
