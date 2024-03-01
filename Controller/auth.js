@@ -13,4 +13,7 @@ import bcrypt from 'bcrypt';
     res.status(401).json({ msg: 'Authentication failed' });
   }
 };
+
+
 export{authenticateUser}
+
