@@ -7,7 +7,7 @@ const authenticate = (req, res, next) => {
   jwt.verify(tokenInHeader, process.env.SECRET_key, (err, user) => {
     if (err || !user) return res.sendStatus(403);
     req.user = user;
-    next(); // Continue to the next middleware/route
+    next(); 
   });
 };
 
