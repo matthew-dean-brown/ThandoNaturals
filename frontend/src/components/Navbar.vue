@@ -1,7 +1,7 @@
 <template>
   <div class="image-section">
     <div class="logo-container">
-      <img src="https://i.postimg.cc/fysNWgSy/Thando-Naturals2.jpg" alt="Logo" class="logo">
+      <img src="https://i.ibb.co/S3GHggN/Thando-Naturals2.jpg" alt="Logo" class="logo">
       <h1 class="company-name"><strong>ThandoNaturals</strong></h1>
     </div>
     <div>
