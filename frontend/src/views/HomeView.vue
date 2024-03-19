@@ -26,13 +26,14 @@
         </button>
       </div>
     </div>
+   
   </section>
 </template>
 
 <script>
 export default {
   mounted() {
-    this.initCarousel();
+    // this.initCarousel();
   },
 }
 </script>
