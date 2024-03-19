@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import productRoutes from './routes/productsRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import authenticate from './middleware/authMiddleware.js';
+
 
 config();
 
@@ -17,6 +17,8 @@ app.use(cors());
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.static( '/public'));
 
 // Use your auth middleware
 // app.use(authenticate);
