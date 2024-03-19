@@ -34,17 +34,10 @@ export default {
   mounted() {
     this.initCarousel();
   },
-  methods: {
-    initCarousel() {
-      var carousel = new bootstrap.Carousel(document.querySelector('.carousel'), {
-        interval: 2000 // Adjust the autoplay interval as needed
-      });
-    }
-  }
 }
 </script>
 
-<style scoped>
+<style>
 .carousel-section {
   padding: 20px;
 }
@@ -56,8 +49,8 @@ export default {
 }
 
 .carousel-image {
-  max-width: 100%; 
-  height: auto; 
+  max-width: 500%; 
+  height: 500%; 
 }
 
 

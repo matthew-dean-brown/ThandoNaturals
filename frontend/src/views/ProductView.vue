@@ -1,5 +1,5 @@
 <template>
-    <div class="product-grid">
+    <div v-if="$store.state.products!= null" class="product-grid">
       <div v-for="product in $store.state.products" :key="product.prodID" class="product-card">
       <!-- <div v-for="item in $store.state.products" :key="item" class="product-card"> -->
         <h2>{{ product.prodName }}</h2>
@@ -12,10 +12,17 @@
         <router-link :to="{name: 'singleProduct',params:{id: product.prodID}}">View More</router-link>
       </div> -->
     </div>
+    <article v-else>
+        <Spinner /> 
+      </article>
   </template>
   
   <script>
+  import Spinner from '../components/Spinner.vue'
   export default {
+    components:{
+    Spinner
+  },
     computed: {
       products() {
         this.$store.dispatch('fetchProducts'); 
@@ -24,8 +31,7 @@
     mounted() {
         this.products
              
-    },
-    methods: {}
+    }
   };
   </script>
   

@@ -10,13 +10,18 @@
 export default {
   data() {
     return {
-      loaded: false
+      loaded: false,
+      timeoutId: null 
     };
   },
   mounted() {
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       this.loaded = true;
+      this.$emit('loading-complete'); 
     }, 2000);
+  },
+  destroyed() {
+    clearTimeout(this.timeoutId); 
   }
 }
 </script>
@@ -28,7 +33,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
+  /* background-color: rgba(255, 255, 255, 0.9); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,12 +41,12 @@ export default {
 }
 
 .custom-spinner {
-  border: 6px solid #226c2b; 
+  border: none; 
   border-top: 6px solid black;
   border-radius: 50%;
   width: 80px;
   height: 80px;
-  animation: spin 1s linear infinite;
+  animation: spin 1s;
 }
 
 @keyframes spin {
