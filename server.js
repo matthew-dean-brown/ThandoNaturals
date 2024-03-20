@@ -13,14 +13,14 @@ const app = express();
 
 
 app.use(cors({
-  origin:'https://thanonaturals.web.app/'
+  origin:'https://thanonaturals.web.app'
 }));
 
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(express.static( '/public'));
+app.use(express.static('public'));
 
 // Use your auth middleware
 // app.use(authenticate);
