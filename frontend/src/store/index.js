@@ -21,7 +21,7 @@ export default createStore({
   actions: {
     async fetchProducts({ commit }) {
       try {
-        const { data } = await axios.get('http://localhost:8985/products');
+        const { data } = await axios.get('https://thandonaturals-1-b3l5.onrender.com/products');
         console.log(data); 
        
           commit("setProducts", data); 
